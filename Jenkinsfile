@@ -21,6 +21,7 @@ node {
   } finally {
     stage('cleanup') {
       echo "doing some cleanup..."
+      
     }
   }
 }
