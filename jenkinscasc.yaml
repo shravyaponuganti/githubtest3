@@ -1,0 +1,172 @@
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - usernamePassword:
+          description: "GitServiceAccessToken"
+          id: "GitServiceAccessToken"
+          password: "{AQAAABAAAAAwD/bKcaFQ7l62eZKNkCb4tsgZIf6hdLDEl94VIlnv2yaX123TcnBQoSkOTM1kr+c2BRiu+OhgdhZPmG6ZcBGgpg==}"
+          scope: GLOBAL
+          username: "service-user"
+jenkins:
+  agentProtocols:
+  - "JNLP4-connect"
+  - "Ping"
+  securityRealm:
+   azure:
+      cacheDuration: 3600
+      clientId: "3cb72624-55d3-4f70-8396-d3e6e801e1da"
+      clientSecret: "nht8Q~VqPWPZxf1z31GmOHxIfpic8W84g.ZbFcKB"
+      tenant: "ac9fa6b2-8f69-4a07-9906-ffece1796978"
+  authorizationStrategy:
+    azureAdMatrix:
+      permissions:
+      - "GROUP:Job/Read:authenticated"
+      - "GROUP:Overall/Administer:adg-altus-np-jenkinsadmin (441076d6-90e4-4172-94bf-1d91c5d695e9)"
+      - "GROUP:Overall/Read:authenticated"
+  clouds:
+  - aci:
+      credentialsId: "azurespjenkins"
+      name: "GSE Azure Container Instance"
+      resourceGroup: "rg-gse-sbx-euno-jenkins-01"
+      templates:
+      - command: "jenkins-agent -url http://10.65.0.117:8080/ ^${secret} ^${nodeName}"
+        cpu: "1"
+        image: "argusdockersvc1/gseazuredocker:dotnet-core-3.1-terraform-azurecli"
+        label: "build-agent-01"
+        memory: "1.5"
+        name: "aci-gse-sbx-euno-jenkinsbuildagent"
+        osType: "Linux"
+        privateIpAddress:
+          resourceGroup: "rg-gse-sbx-euno-network-01"
+          subnet: "snet-gse-sbx-jenkinscontrolleraci-01"
+          vnet: "vnet-gse-sbx-euno-01"
+        retentionStrategy: "containerOnce"
+        rootFs: "/var/jenkins_home"
+        timeout: 10
+      - command: "jenkins-agent -url http://10.65.0.117:8080/ ^${secret} ^${nodeName}"
+        cpu: "1"
+        image: "shravyaponuganti/shravyatest:powershellnew"
+        label: "build-agent-02"
+        memory: "1.5"
+        name: "aci-gse-sbx-euno-jenkinsbuildagent-core"
+        osType: "Linux"
+        privateIpAddress:
+          resourceGroup: "rg-gse-sbx-euno-network-01"
+          subnet: "snet-gse-sbx-jenkinscontrolleraci-01"
+          vnet: "vnet-gse-sbx-euno-01"
+        retentionStrategy: "containerOnce"
+        rootFs: "/var/jenkins_home"
+        timeout: 10 
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: false
+  disableRememberMe: false
+  labelAtoms:
+  - name: "built-in"
+  markupFormatter: "plainText"
+  mode: NORMAL
+  myViewsTabBar: "standard"
+  numExecutors: 2
+  primaryView:
+    all:
+      name: "all"
+  projectNamingStrategy: "standard"
+  quietPeriod: 5
+  remotingSecurity:
+    enabled: true
+  scmCheckoutRetryCount: 0  
+  slaveAgentPort: 50000
+  updateCenter:
+    sites:
+    - id: "default"
+      url: "https://updates.jenkins.io/update-center.json"
+  views:
+  - all:
+      name: "all"
+  viewsTabBar: "standard"
+globalCredentialsConfiguration:
+  configuration:
+    providerFilter: "none"
+    typeFilter: "none"
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  gitHooks:
+    allowedOnAgents: false
+    allowedOnController: false
+  gitHostKeyVerificationConfiguration:
+    sshHostKeyVerificationStrategy: "knownHostsFileVerificationStrategy"
+  sSHD:
+    port: -1
+unclassified:
+  buildDiscarders:
+    configuredBuildDiscarders:
+    - "jobBuildDiscarder"
+  buildStepOperation:
+    enabled: false
+  email-ext:
+    adminRequiredForTemplateTesting: false
+    allowUnregisteredEnabled: false
+    charset: "UTF-8"
+    debugMode: false
+    defaultBody: |-
+      $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
+
+      Check console output at $BUILD_URL to view the results.
+    defaultSubject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!"
+    defaultTriggerIds:
+    - "hudson.plugins.emailext.plugins.trigger.FailureTrigger"
+    maxAttachmentSize: -1
+    maxAttachmentSizeMb: -1
+    precedenceBulk: false
+    watchingEnabled: false
+  fingerprints:
+    fingerprintCleanupDisabled: false
+    storage: "file"
+  gitHubConfiguration:
+    apiRateLimitChecker: ThrottleForNormalize
+  gitHubPluginConfig:
+    hookUrl: "http://20.67.207.240:8080/github-webhook/"
+  gitSCM:
+    addGitTagAction: false
+    allowSecondFetch: false
+    createAccountBasedOnEmail: false
+    disableGitToolChooser: false
+    hideCredentials: false
+    showEntireCommitSummaryInChanges: false
+    useExistingAccountWithSameEmail: false
+  globalTimeOutConfiguration:
+    operations:
+    - "abortOperation"
+    overwriteable: false
+  injectionConfig:
+    allowUntrusted: false
+    enabled: false
+    injectCcudExtension: false
+    injectMavenExtension: false
+  junitTestResultStorage:
+    storage: "file"
+  location:
+    adminAddress: "address not configured yet <nobody@nowhere>"
+    url: "http://20.67.207.240:8080/"
+  mailer:
+    charset: "UTF-8"
+    useSsl: false
+    useTls: false
+  pollSCM:
+    pollingThreadCount: 10
+  timestamper:
+    allPipelines: false
+    elapsedTimeFormat: "'<b>'HH:mm:ss.S'</b> '"
+    systemTimeFormat: "'<b>'HH:mm:ss'</b> '"
+tool:
+  git:
+    installations:
+    - home: "git"
+      name: "Default"
+  mavenGlobalConfig:
+    globalSettingsProvider: "standard"
+    settingsProvider: "standard"
